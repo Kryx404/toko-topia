@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import Product from './Product';
+import Cart from './Cart';
 
 const ProductList = () => {
   const [products, setProducts] = useState([]);
@@ -19,6 +20,7 @@ const ProductList = () => {
           <Product key={product.id} product={product} />
         ))}
       </div>
+      <Cart/>
     </div>
   );
 };
