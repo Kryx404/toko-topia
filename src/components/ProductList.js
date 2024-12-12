@@ -6,25 +6,10 @@ const ProductList = () => {
   const apiUrl = process.env.REACT_APP_API_URL;
 
   useEffect(() => {
-    const fetchProducts = async () => {
-      try {
-        const response = await fetch(`${apiUrl}/products`);
-
-        // Periksa apakah respons berhasil
-        if (!response.ok) {
-          throw new Error(`HTTP error! status: ${response.status}`);
-        }
-
-        // Periksa apakah respons memiliki konten
-        const data = await response.json();
-        setProducts(data);
-      } catch (error) {
-        console.error('Error fetching products:', error);
-      }
-    };
-
-    fetchProducts();
-  }, [apiUrl]);
+    fetch(`${apiUrl}/products`)
+      .then(response => response.json())
+      .then(data => setProducts(data));
+  }, []);
 
   return (
     <div className="container mx-auto p-4">
