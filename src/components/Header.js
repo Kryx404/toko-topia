@@ -9,7 +9,7 @@ const Header = () => {
         <nav className="flex justify-end">
           <ul className="flex justify-end">
             <li className="mr-4">
-              <a href="#" className="text-white hover:text-orange-500">Beranda</a>
+              <Link to="/" className="text-white hover:text-orange-500">Beranda</Link>
             </li>
             <li className="mr-4">
               <a href="#" className="text-white hover:text-orange-500">Produk</a>
@@ -18,7 +18,7 @@ const Header = () => {
               <Link to="/cart" className="text-white hover:text-orange-500">Keranjang</Link>
             </li>
             <li>
-              <a href="#" className="text-white hover:text-orange-500">Login</a>
+              <Link to="/login" className="text-white hover:text-orange-500">Login</Link>
             </li>
           </ul>
         </nav>

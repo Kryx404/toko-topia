@@ -1,16 +1,35 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom"; // Pastikan ini diimpor dari 'react-router-dom'
-import { useDispatch } from "react-redux";
+import { Link, useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
 import { addToCart } from "../store/cartSlice"; // Import addToCart action
+import Swal from "sweetalert2";
 
 const Product = ({ product }) => {
     const dispatch = useDispatch();
+    const navigate = useNavigate();
+    const isLoggedIn = useSelector((state) => state.user.isLoggedIn);
 
     const [availableStock, setAvailableStock] = useState(
         product.availableStock || 20
     );
 
     const handleAddToCart = () => {
+        if (!isLoggedIn) {
+            Swal.fire({
+                title: 'Peringatan!',
+                text: 'Anda harus login terlebih dahulu untuk melakukan pembelian',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonText: 'Login',
+                cancelButtonText: 'Batal',
+                }).then((result) => {
+                    if (result.isConfirmed) {
+            navigate("/login");
+        }
+    });
+    return;
+}
+
         if (availableStock > 0) {
             dispatch(
                 addToCart({
