@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { addToCart } from "../store/cartSlice"; // Import addToCart action
@@ -13,33 +13,51 @@ const Product = ({ product }) => {
         product.availableStock || 20
     );
 
+    const [quantity, setQuantity] = useState(1);
+
+    useEffect(() => {
+        // Ambil jumlah stok terakhir dari localStorage
+        const storedStock = localStorage.getItem(`stock_${product.id}`);
+        if (storedStock) {
+            setAvailableStock(JSON.parse(storedStock));
+        } else {
+            setAvailableStock(product.availableStock || 20);
+        }
+    }, [product.id, product.availableStock]);
+
     const handleAddToCart = () => {
         if (!isLoggedIn) {
             Swal.fire({
-                title: 'Peringatan!',
-                text: 'Anda harus login terlebih dahulu untuk melakukan pembelian',
-                icon: 'warning',
+                title: "Peringatan!",
+                text: "Anda harus login terlebih dahulu untuk melakukan pembelian",
+                icon: "warning",
                 showCancelButton: true,
-                confirmButtonText: 'Login',
-                cancelButtonText: 'Batal',
-                }).then((result) => {
-                    if (result.isConfirmed) {
-            navigate("/login");
+                confirmButtonText: "Login",
+                cancelButtonText: "Batal",
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    navigate("/login");
+                }
+            });
+            return;
         }
-    });
-    return;
-}
 
-        if (availableStock > 0) {
+        if (quantity <= availableStock) {
             dispatch(
                 addToCart({
                     id: product.id,
                     title: product.title,
                     price: product.price,
-                    quantity: 1,
+                    quantity: quantity,
                 })
             );
-            setAvailableStock(availableStock - 1);
+            // Update availableStock dan lastStock
+            const newAvailableStock = availableStock - quantity;
+            setAvailableStock(newAvailableStock);
+            localStorage.setItem(
+                `stock_${product.id}`,
+                JSON.stringify(availableStock - quantity)
+            );
         } else {
             alert("Stok Tidak Cukup!");
         }
