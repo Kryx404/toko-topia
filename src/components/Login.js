@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { login } from '../store/userSlice';
 import { useNavigate } from 'react-router-dom';
+import Swal from 'sweetalert2';
 
 const Login = () => {
   const [email, setEmail] = useState('');
@@ -17,7 +18,14 @@ const Login = () => {
     
     // Setelah login berhasil, arahkan pengguna ke halaman beranda atau halaman lain
     dispatch(login({ email }));
-    navigate('/');
+    Swal.fire({
+      title: 'Login Berhasil!',
+      text: 'Selamat datang kembali!',
+      icon: 'success',
+      confirmButtonText: 'OK'
+    }).then(() => {
+      navigate('/'); // Arahkan pengguna ke halaman beranda
+    });
   };
 
   return (
