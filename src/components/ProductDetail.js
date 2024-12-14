@@ -13,11 +13,19 @@ const ProductDetail = () => {
     const [product, setProduct] = useState(null);
     const [quantity, setQuantity] = useState(1); // Inisialisasi quantity dengan 1
     const [availableStock, setAvailableStock] = useState(0);
-    const [lastStock, setLastStock] = useState(0); // Inisialisasi quantity dengan 1
 
     useEffect(() => {
         const fetchProductDetail = async () => {
             try {
+                // Ambil stok dari localStorage terlebih dahulu
+                const storedStock = localStorage.getItem(`stock_${id}`);
+                if (storedStock) {
+                    setAvailableStock(JSON.parse(storedStock));
+                } else {
+                    setAvailableStock(20); // Set default jika tidak ada
+                }
+
+                // Ambil detail produk dari API
                 const response = await fetch(`${apiUrl}/products/${id}`);
                 if (!response.ok) {
                     throw new Error(`HTTP error! status: ${response.status}`);
@@ -25,14 +33,6 @@ const ProductDetail = () => {
                 const data = await response.json();
                 setProduct(data);
                 setQuantity(Math.min(20, data.availableStock || 1));
-
-                // Ambil stok dari localStorage
-                const storedStock = localStorage.getItem(`stock_${id}`);
-                if (storedStock) {
-                    setAvailableStock(JSON.parse(storedStock));
-                } else {
-                    setAvailableStock(data.availableStock || 20);
-                }
             } catch (error) {
                 console.error("Error fetching product detail:", error);
             }
@@ -58,7 +58,7 @@ const ProductDetail = () => {
             return;
         }
 
-        if (product && quantity > product.availableStock) {
+        if (product && quantity > availableStock) {
             Swal.fire({
                 title: "Stok Tidak Cukup!",
                 text:
@@ -81,10 +81,12 @@ const ProductDetail = () => {
             }),
         );
 
-        localStorage.setItem(
-            `stock_${product.id}`,
-            JSON.stringify(product.availableStock),
-        );
+      // Update localStorage
+const newAvailableStock = availableStock - quantity;
+if (newAvailableStock >= 0) { // Pastikan stok tidak menjadi negatif
+    setAvailableStock(newAvailableStock);
+    localStorage.setItem(`stock_${product.id}`, JSON.stringify(newAvailableStock));
+}
 
         Swal.fire({
             title: "Berhasil!",
@@ -92,6 +94,17 @@ const ProductDetail = () => {
             icon: "success",
             confirmButtonText: "OK",
         });
+    };
+
+    const handleQuantityChange = (e) => {
+        const value = Number(e.target.value);
+        if (value >= 1 && value <= availableStock) {
+            setQuantity(value);
+        } else if (value < 1) {
+            setQuantity(1); // Set minimum quantity to 1
+        } else {
+            setQuantity(availableStock); // Set to available stock if exceeds
+        }
     };
 
     if (!product) {
@@ -114,19 +127,10 @@ const ProductDetail = () => {
                     <input
                         type="number"
                         value={quantity}
-                        onChange={(e) => {
-                            const newQuantity = Math.max(
-                                1,
-                                Math.min(
-                                    Number(e.target.value),
-                                    product.availableStock || 1,
-                                ),
-                            );
-                            setQuantity(newQuantity);
-                        }}
+                        onChange={handleQuantityChange }
                         className="border rounded w-20 py-2 px-3"
                         min="1"
-                        max={product.availableStock || 1}
+                        max={availableStock || 1}
                     />
                 </div>
                 <button

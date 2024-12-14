@@ -7,6 +7,7 @@ import Swal from "sweetalert2";
 const Product = ({ product }) => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
+    
     const isLoggedIn = useSelector((state) => state.user.isLoggedIn);
 
     const [availableStock, setAvailableStock] = useState(
@@ -18,8 +19,14 @@ const Product = ({ product }) => {
     useEffect(() => {
         // Ambil jumlah stok terakhir dari localStorage
         const storedStock = localStorage.getItem(`stock_${product.id}`);
-        if (storedStock) {
-            setAvailableStock(JSON.parse(storedStock));
+        if (storedStock !== null) { // Periksa apakah storedStock tidak null
+            try {
+                const parsedStock = JSON.parse(storedStock);
+                setAvailableStock(parsedStock);
+            } catch (error) {
+                console.error("Error parsing stored stock:", error);
+                setAvailableStock(product.availableStock || 20); // Set ke default jika parsing gagal
+            }
         } else {
             setAvailableStock(product.availableStock || 20);
         }
@@ -59,7 +66,12 @@ const Product = ({ product }) => {
                 JSON.stringify(availableStock - quantity)
             );
         } else {
-            alert("Stok Tidak Cukup!");
+            Swal.fire({
+                title: "Stok Tidak Cukup!",
+                text: "Jumlah yang ingin Anda tambahkan melebihi stok yang tersedia.",
+                icon: "warning",
+                confirmButtonText: "OK",
+            });
         }
     };
 
