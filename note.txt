@@ -1,9 +1,8 @@
 % TODO
  
-   ! halaman detail produk grg bener ( quantity sek gak sinkron ambek halaman produk)
-
-    ? terakhir garap quantity
 
 
-kendala :
+
+
+% kendala :
 sinkron stok produk

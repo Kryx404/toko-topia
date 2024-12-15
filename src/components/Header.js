@@ -40,9 +40,11 @@ const handleLogout = () => {
             <li className="mr-4">
               <Link to="/" className="text-white hover:text-orange-500">Beranda</Link>
             </li>
+            {isLoggedIn && (
             <li className="mr-4">
               <Link to="/cart" className="text-white hover:text-orange-500">Keranjang</Link>
             </li>
+            )}
             <li>
               {isLoggedIn ? (
                 <button onClick={handleLogout} className="text-white hover:text-orange-500">Logout</button>
