@@ -5,6 +5,7 @@ import ProductList from './components/ProductList';
 import ProductDetail from './components/ProductDetail';
 import Cart from './components/Cart';
 import Login from './components/Login';
+import Footer from './components/Footer';
 
 const AppRouter = () => {
     return (
@@ -19,6 +20,7 @@ const AppRouter = () => {
 
           </Routes>
         </div>
+        <Footer/>
       </div>
     );
 };
