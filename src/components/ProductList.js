@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import Product from "./Product";
 import Cart from "./Cart";
+import Header from './Header';
 
 const ProductList = () => {
     const [product, setProducts] = useState([]);
@@ -33,24 +34,21 @@ const ProductList = () => {
             if (filteredItems.length > 0) {
                 acc[category] = filteredItems;
             }
-            return acc;
+            return acc; 
         },
         {},
     );
 
+      // Fungsi untuk menangani pencarian
+      const handleSearch = (term) => {
+        setSearchTerm(term);
+    };
+
     return (
         <div className="container mx-auto p-4">
             <h1 className="text-3xl font-bold">Daftar Produk</h1>
-            <input
-                type="text"
-                placeholder="Cari produk..."
-                value={searchTerm}
-                onChange={(e) => {
-                    setSearchTerm(e.target.value);
-                    console.log("Search term:", e.target.value); // Tambahkan log ini
-                }}
-                className="border rounded p-2 mb-4"
-            />
+            <Header onSearch={handleSearch}/>
+           
             {Object.keys(filteredProduct).length > 0 ? (
                 Object.keys(filteredProduct).map((category) => (
                     <div key={category} className="mb-8">
