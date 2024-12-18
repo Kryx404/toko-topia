@@ -3,15 +3,17 @@ import { Link, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { addToCart } from "../store/cartSlice"; // Import addToCart action
 import Swal from "sweetalert2";
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faCartPlus, faCircleInfo } from '@fortawesome/free-solid-svg-icons';
 
 const Product = ({ product }) => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
-    
+
     const isLoggedIn = useSelector((state) => state.user.isLoggedIn);
 
     const [availableStock, setAvailableStock] = useState(
-        product.availableStock || 20
+        product.availableStock || 20,
     );
 
     const [quantity, setQuantity] = useState(1);
@@ -19,7 +21,8 @@ const Product = ({ product }) => {
     useEffect(() => {
         // Ambil jumlah stok terakhir dari localStorage
         const storedStock = localStorage.getItem(`stock_${product.id}`);
-        if (storedStock !== null) { // Periksa apakah storedStock tidak null
+        if (storedStock !== null) {
+            // Periksa apakah storedStock tidak null
             try {
                 const parsedStock = JSON.parse(storedStock);
                 setAvailableStock(parsedStock);
@@ -56,15 +59,22 @@ const Product = ({ product }) => {
                     title: product.title,
                     price: product.price,
                     quantity: quantity,
-                })
+                }),
             );
             // Update availableStock dan lastStock
             const newAvailableStock = availableStock - quantity;
             setAvailableStock(newAvailableStock);
             localStorage.setItem(
                 `stock_${product.id}`,
-                JSON.stringify(availableStock - quantity)
+                JSON.stringify(availableStock - quantity),
             );
+
+            Swal.fire({
+                title: "Berhasil!",
+                text: "Produk berhasil ditambahkan ke keranjang",
+                icon: "success",
+                confirmButtonText: "OK",
+            });
         } else {
             Swal.fire({
                 title: "Stok Tidak Cukup!",
@@ -76,26 +86,33 @@ const Product = ({ product }) => {
     };
 
     return (
-        <div className="border rounded-lg p-4">
+        <div className="border bg-white rounded-lg p-4 shadow-lg overflow-hidden transition-transform transform hover:scale-105">
             <img
                 src={product.image}
                 alt={product.title}
-                className="w-full h-48 object-contain"
+                className="w-full h-36 object-contain"
             />
-            <h2 className="text-xl font-bold">{product.title}</h2>
-            <p className="text-gray-700">Harga: ${product.price}</p>
-            <p className="text-gray-700">Stok: {availableStock}</p>
-            <Link to={`/products/${product.id}`}>
-                <button className="mt-2 bg-blue-500 text-white py-2 px-4 rounded">
-                    Lihat Detail
+            <div className="p-4">
+                <h2 className="text-lg font-semibold">{product.title}</h2>
+                <p className="text-l font-semibold mt-2 text-gray-700">
+                    Harga: ${product.price}
+                </p>
+                <p className="text-gray-700">Stok: {availableStock}</p>
+                <div className="flex flex-col gap-0">
+                <Link to={`/products/${product.id}`}>
+                    <button className="w-full mt-2 bg-blue-700 text-white py-2 px-4 rounded hover:bg-blue-500 transition">
+                    <FontAwesomeIcon icon={faCircleInfo} className="mr-2"/>
+                        Lihat Detail
+                    </button>
+                </Link>
+                <button
+                    onClick={handleAddToCart}
+                    className="w-full mt-2 bg-green-500 text-white py-2 px-4 rounded hover:bg-green-600 transition">
+                    <FontAwesomeIcon icon={faCartPlus} className="mr-2" />
+                    Add to Cart
                 </button>
-            </Link>
-            <button
-                onClick={handleAddToCart}
-                className="mt-2 bg-green-500 text-white py-2 px-4 rounded"
-            >
-                Add to Cart
-            </button>
+                </div>
+            </div>
         </div>
     );
 };

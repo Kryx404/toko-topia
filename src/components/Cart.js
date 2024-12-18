@@ -96,7 +96,7 @@ if (!stockSufficient){
                <div>
                <ul>
                     {cartItems.map(item => (
-                        <li key={item.id} className="border-b py-2">
+                        <li key={item.id} className="border-b py-2 flex items-center">
                             {item.title} - ${item.price} x 
                             <input
                                 type="number"
