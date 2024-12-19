@@ -45,8 +45,8 @@ const Login = () => {
             // Setelah login berhasil, arahkan pengguna ke halaman beranda atau halaman lain
             dispatch(login({ email }));
             Swal.fire({
-                title: "Login Berhasil!",
-                text: "Selamat datang kembali!",
+                title: "Login Successful!",
+                text: "Welcome back!",
                 icon: "success",
                 confirmButtonText: "OK",
             }).then(() => {
@@ -54,8 +54,8 @@ const Login = () => {
             });
         } else {
             Swal.fire({
-                title: "Login Gagal!",
-                text: "Email atau password salah.",
+                title: "Login Failed!",
+                text: "Incorrect email or password.",
                 icon: "error",
                 confirmButtonText: "OK",
             });
@@ -125,7 +125,6 @@ const Login = () => {
                                             aria-describedby="remember"
                                             type="checkbox"
                                             className="w-4 h-4 border border-gray-300 rounded bg-gray-50 focus:ring-3 focus:ring-primary-300"
-                                            required
                                         />
                                     </div>
                                     <div className="ml-3 text-sm">
@@ -160,7 +159,7 @@ const Login = () => {
                 </div>
                 {/* user yang terdaftar */}
                 <div className="text-center text-gray-600 mt-4">
-                  <h3>USER DEFAULT</h3>
+                    <h3>USER DEFAULT</h3>
                     <p>email:John@gmail.com</p>
                     <p>password:m38rmF$</p>
                 </div>

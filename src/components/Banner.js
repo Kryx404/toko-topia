@@ -22,7 +22,7 @@ const Banner = ({ banners }) => {
             <img
                 src={banners[currentIndex].url}
                 alt={`Banner ${currentIndex + 1}`}
-                className="w-full h-64 md:h-96 object-cover rounded-lg shadow-lg"
+                className="w-full h-64 md:h-80 object-cover rounded-lg shadow-lg"
             />
         </div>
     );

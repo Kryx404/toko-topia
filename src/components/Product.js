@@ -3,8 +3,8 @@ import { Link, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { addToCart } from "../store/cartSlice"; // Import addToCart action
 import Swal from "sweetalert2";
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faCartPlus, faCircleInfo } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faCartPlus, faCircleInfo } from "@fortawesome/free-solid-svg-icons";
 
 const Product = ({ product }) => {
     const dispatch = useDispatch();
@@ -38,12 +38,12 @@ const Product = ({ product }) => {
     const handleAddToCart = () => {
         if (!isLoggedIn) {
             Swal.fire({
-                title: "Peringatan!",
-                text: "Anda harus login terlebih dahulu untuk melakukan pembelian",
+                title: "Warning!",
+                text: "You must log in first to make a purchase",
                 icon: "warning",
                 showCancelButton: true,
                 confirmButtonText: "Login",
-                cancelButtonText: "Batal",
+                cancelButtonText: "Cancel",
             }).then((result) => {
                 if (result.isConfirmed) {
                     navigate("/login");
@@ -55,6 +55,7 @@ const Product = ({ product }) => {
         if (quantity <= availableStock) {
             dispatch(
                 addToCart({
+                    image: product.image,
                     id: product.id,
                     title: product.title,
                     price: product.price,
@@ -70,15 +71,15 @@ const Product = ({ product }) => {
             );
 
             Swal.fire({
-                title: "Berhasil!",
-                text: "Produk berhasil ditambahkan ke keranjang",
+                title: "Success!",
+                text: "Product successfully added to the cart",
                 icon: "success",
                 confirmButtonText: "OK",
             });
         } else {
             Swal.fire({
-                title: "Stok Tidak Cukup!",
-                text: "Jumlah yang ingin Anda tambahkan melebihi stok yang tersedia.",
+                title: "Insufficient Stock!",
+                text: "The quantity you want to add exceeds the available stock.",
                 icon: "warning",
                 confirmButtonText: "OK",
             });
@@ -93,24 +94,29 @@ const Product = ({ product }) => {
                 className="w-full h-36 object-contain"
             />
             <div className="p-4">
-                <h2 className="text-lg font-semibold">{product.title}</h2>
+                <h2 className="text-lg font-semibold overflow-hidden whitespace-nowrap text-ellipsis">
+                    {product.title}
+                </h2>
                 <p className="text-l font-semibold mt-2 text-gray-700">
-                    Harga: ${product.price}
+                    Price: ${product.price}
                 </p>
-                <p className="text-gray-700">Stok: {availableStock}</p>
+                <p className="text-gray-700">Stock: {availableStock}</p>
                 <div className="flex flex-col gap-0">
-                <Link to={`/products/${product.id}`}>
-                    <button className="w-full mt-2 bg-blue-700 text-white py-2 px-4 rounded hover:bg-blue-500 transition">
-                    <FontAwesomeIcon icon={faCircleInfo} className="mr-2"/>
-                        Lihat Detail
+                    <Link to={`/products/${product.id}`}>
+                        <button className="w-full mt-2 bg-blue-700 text-white py-2 px-4 rounded hover:bg-blue-500 transition">
+                            <FontAwesomeIcon
+                                icon={faCircleInfo}
+                                className="mr-2"
+                            />
+                            Detail Product
+                        </button>
+                    </Link>
+                    <button
+                        onClick={handleAddToCart}
+                        className="w-full mt-2 bg-green-500 text-white py-2 px-4 rounded hover:bg-green-600 transition">
+                        <FontAwesomeIcon icon={faCartPlus} className="mr-2" />
+                        Add to Cart
                     </button>
-                </Link>
-                <button
-                    onClick={handleAddToCart}
-                    className="w-full mt-2 bg-green-500 text-white py-2 px-4 rounded hover:bg-green-600 transition">
-                    <FontAwesomeIcon icon={faCartPlus} className="mr-2" />
-                    Add to Cart
-                </button>
                 </div>
             </div>
         </div>

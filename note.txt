@@ -1,9 +1,9 @@
 % TODO
- limit panjang deskripsi
- tampilan cart
- edit header
- tambah logo dan icon
- ubah tampilan loading
+ edit header tambah category
+
+ ganti bahasa ke inggris
+ tambah category di product list
+
 
 
 

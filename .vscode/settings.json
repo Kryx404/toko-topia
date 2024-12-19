@@ -2,5 +2,7 @@
     "editor.tokenColorCustomizations": {
         "comments": "",
         "textMateRules": []
-    }
+    },
+    "editor.mouseWheelZoom": true,
+    "window.zoomLevel": -1
 }
