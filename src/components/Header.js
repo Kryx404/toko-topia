@@ -9,6 +9,8 @@ import {
     faRightToBracket,
     faRightFromBracket,
     faHouse,
+    faTimes,
+    faBars,
 } from "@fortawesome/free-solid-svg-icons";
 
 // Komponen Header yang menampilkan navigasi dan fitur pencarian
@@ -21,6 +23,12 @@ const Header = ({ onSearch }) => {
 
     // Menggunakan hook useState untuk mengelola state pencarian
     const [searchTerm, setSearchTerm] = useState("");
+
+    // State untuk menentukan apakah sidebar terbuka atau tidak
+    const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+
+    // Menggunakan hook useRef untuk mendapatkan referensi sidebar
+    const sidebarRef = useRef(null);
 
     // Fungsi untuk menangani logout pengguna
     const handleLogout = () => {
@@ -54,12 +62,36 @@ const Header = ({ onSearch }) => {
         onSearch(e.target.value);
     };
 
+    // Fungsi untuk menampilkan atau menyembunyikan sidebar
+    const toggleSidebar = () => {
+        setIsSidebarOpen(!isSidebarOpen);
+    };
+
+    // Effect untuk menutup sidebar ketika klik di luar
+    useEffect(() => {
+        const handleClickOutside = (event) => {
+            if (sidebarRef.current && !sidebarRef.current.contains(event.target)) {
+                setIsSidebarOpen(false);
+            }
+        };
+
+        if (isSidebarOpen) {
+            document.addEventListener("mousedown", handleClickOutside);
+        } else {
+            document.removeEventListener("mousedown", handleClickOutside);
+        }
+
+        return () => {
+            document.removeEventListener("mousedown", handleClickOutside);
+        };
+    }, [isSidebarOpen]);
+
     return (
         <header
             className="fixed top-0 left-0 w-full text-black py-4 bg-white shadow-md"
             style={{ zIndex: 1000 }}>
-            <div className="container mx-auto flex flex-col md:flex-row items-center justify-between">
-                <div className="flex items-center mb-4 md:mb-0">
+            <div className="container mx-auto mx-4 px-4 md:px-0 flex justify-between items-center">
+                <div className="flex items-center">
                     <Link to="/" className="-m-1.5 p-1.5 flex items-center">
                         <img
                             alt="TokoTopia"
@@ -70,7 +102,7 @@ const Header = ({ onSearch }) => {
                     </Link>
                 </div>
 
-                <div className="flex justify-center mx-4">
+                <div className="hidden flex justify-center mx-4">
                     <input
                         type="text"
                         placeholder="Search..."
@@ -80,8 +112,8 @@ const Header = ({ onSearch }) => {
                     />
                 </div>
 
-                <nav className="flex flex-col md:flex-row items-center">
-                    <ul className="flex flex-col md:flex-row justify-end gap-4 items-center">
+                <nav className="hidden md:flex flex-row items-center">
+                    <ul className="flex flex-row justify-end gap-4 items-center">
                         <li>
                             <Link
                                 to="/"
@@ -131,7 +163,64 @@ const Header = ({ onSearch }) => {
                         </li>
                     </ul>
                 </nav>
+                {/* Icon sidebar */}
+                <div className="md:hidden">
+                    <button onClick={toggleSidebar} className="text-black">
+                        <FontAwesomeIcon icon={faBars} />
+                    </button>
+                </div>
             </div>
+            
+
+            {/* Sidebar */}
+            {isSidebarOpen && (
+                <div ref={sidebarRef} className="fixed inset-y-0 right-0 bg-white z-50 md:hidden w-64 shadow-lg transition-transform transform duration-300 ease-in-out" style={{ transform: isSidebarOpen ? 'translateX(0)' : 'translateX(100%)' }}>
+                    <div className="flex justify-between items-center p-4">
+                        <h2 className="text-lg font-bold">Menu</h2>
+                        <button onClick={toggleSidebar} className="text-black">
+                            <FontAwesomeIcon icon={faTimes} />
+                        </button>
+                    </div>
+                    <div className="p-4">
+                        <input
+                            type="text"
+                            placeholder="Search..."
+                            value={searchTerm}
+                            onChange={handleSearchChange}
+                            className="border rounded p-2 w-full"
+                        />
+                        <ul className="flex flex-col mt-4">
+                            <li>
+                                <Link to="/" className="text-black hover:text-blue-700 flex items-center py-2">
+                                    <FontAwesomeIcon icon={faHouse} className="mr-2" />
+                                    Homepage
+                                </Link>
+                            </li>
+                            {isLoggedIn && (
+                                <li>
+                                    <Link to="/cart" className="text-black hover:text-blue-700 flex items-center py-2">
+                                        <FontAwesomeIcon icon={faShoppingCart} className="mr-2" />
+                                        Cart
+                                    </Link>
+                                </li>
+                            )}
+                            <li>
+                                {isLoggedIn ? (
+                                    <button onClick={handleLogout} className="text-black hover:text-blue-700 flex items-center py-2">
+                                        <FontAwesomeIcon icon={faRightFromBracket} className="mr-2" />
+                                        Logout
+                                    </button>
+                                ) : (
+                                    <Link to="/login" className="text-black hover:text-blue-700 flex items-center py-2">
+                                        <FontAwesomeIcon icon={faRightToBracket} className="mr-2" />
+                                        Login
+                                    </Link>
+                                )}
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            )}
         </header>
     );
 };

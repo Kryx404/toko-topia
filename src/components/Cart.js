@@ -90,7 +90,7 @@ const Cart = () => {
     // Render komponen Cart
     return (
         <div className="container mx-auto p-4 mt-16">
-            <h1 className="text-3xl font-bold mb-6">Shopping Cart</h1>
+            <h1 className="text-3xl font-bold mb-6 text-center">Shopping Cart</h1>
             {cartItems.length === 0 ? (
                 <p className="mt-16 text-center font-semibold">
                     You haven't selected any items.
@@ -101,8 +101,8 @@ const Cart = () => {
                         {cartItems.map((item) => (
                             <li
                                 key={item.id}
-                                className="flex justify-between items-center py-4">
-                                <div className="flex items-center">
+                                className="flex flex-col md:flex-row justify-between items-center py-4">
+                                <div className="flex items-center mb-4 md:mb-0">
                                     <img
                                         src={item.image}
                                         alt={item.title}
@@ -141,7 +141,7 @@ const Cart = () => {
                             </li>
                         ))}
                     </ul>
-                    <div className="mt-4 flex justify-between items-center">
+                    <div className="mt-4 flex flex-col md:flex-row justify-between items-center">
                         <p className="text-lg font-semibold">
                             Total: $
                             {cartItems
@@ -154,7 +154,7 @@ const Cart = () => {
                         </p>
                         <button
                             onClick={handleCheckout}
-                            className="bg-green-500 text-white py-2 px-4 rounded hover:bg-green-600 transition duration-200">
+                            className="bg-green-500 text-white py-2 px-4 rounded hover:bg-green-600 transition duration-200 mt-4 md:mt-0">
                             Checkout
                         </button>
                     </div>

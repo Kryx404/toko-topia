@@ -94,29 +94,29 @@ const Product = ({ product }) => {
     };
 
     return (
-        <div className="border bg-white rounded-lg p-4 shadow-lg overflow-hidden transition-transform transform hover:scale-105">
+        <div className="border bg-white rounded-lg p-2 sm:p-4 shadow-lg overflow-hidden transition-transform transform hover:scale-105">
             <img
                 src={product.image}
                 alt={product.title} // Menampilkan gambar produk
-                className="w-full h-36 object-contain"
+                className="w-full h-32 sm:h-36 object-contain md:h-48 lg:h-56"
             />
-            <div className="p-4">
-                <h2 className="text-lg font-semibold overflow-hidden whitespace-nowrap text-ellipsis">
+            <div className="p-2 sm:p-4">
+                <h2 className="text-sm sm:text-lg font-semibold overflow-hidden whitespace-nowrap text-ellipsis">
                     {product.title} {/* Menampilkan judul produk */}
                 </h2>
-                <p className="text-l font-semibold mt-2 text-gray-700">
+                <p className="text-sm sm:text-lg font-semibold mt-1 text-gray-700">
                     Price: ${product.price} {/* Menampilkan harga produk */}
                 </p>
-                <p className="text-gray-700">
-                    Stock: {availableStock}{" "}
+                <p className="text-sm sm:text-gray-700">
+                    Stock: {availableStock} 
                     {/* Menampilkan stok yang tersedia */}
                 </p>
-                <div className="flex flex-col gap-0">
+                <div className="flex flex-col gap-1 mt-2">
                     <Link to={`/products/${product.id}`}>
-                        <button className="w-full mt-2 bg-blue-700 text-white py-2 px-4 rounded hover:bg-blue-500 transition">
+                        <button className="w-full bg-blue-700 text-white py-1 sm:py-2 px-0 sm:px-4 rounded hover:bg-blue-500 transition">
                             <FontAwesomeIcon
                                 icon={faCircleInfo}
-                                className="mr-2"
+                                className="mr-1"
                             />
                             Detail Product{" "}
                             {/* Tombol untuk melihat detail produk */}
@@ -124,8 +124,8 @@ const Product = ({ product }) => {
                     </Link>
                     <button
                         onClick={handleAddToCart} // Menangani penambahan produk ke keranjang
-                        className="w-full mt-2 bg-green-500 text-white py-2 px-4 rounded hover:bg-green-600 transition">
-                        <FontAwesomeIcon icon={faCartPlus} className="mr-2" />
+                        className="w-full bg-green-500 text-white py-1 sm:py-2 px-2 sm:px-4 rounded hover:bg-green-600 transition">
+                        <FontAwesomeIcon icon={faCartPlus} className="mr-1" />
                         Add to Cart{" "}
                         {/* Tombol untuk menambahkan produk ke keranjang */}
                     </button>
@@ -135,4 +135,4 @@ const Product = ({ product }) => {
     );
 };
 
-export default Product; 
+export default Product;

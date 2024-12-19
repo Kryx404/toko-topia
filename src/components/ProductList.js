@@ -109,20 +109,20 @@ const ProductList = () => {
             <Banner banners={banners} /> {/* Menggunakan komponen Banner */}
             <h1 className="text-xl font-semibold uppercase mb - 4">Categories</h1>
             {/* Kategori Buttons */}
-            <div className="mb-4 flex justify-center">
-                {categories.map((category) => (
-                    <button
-                        key={category}
-                        onClick={() => handleCategorySelect(category)}
-                        className={`mr-2 px-4 py-2 rounded mb-8 ${
-                            selectedCategory === category
-                                ? "bg-blue-700 text-white"
-                                : "bg-gray-200"
-                        }`}>
-                        {category}
-                    </button>
-                ))}
-            </div>
+            <div className="mb-4 flex justify-center flex-wrap">
+            {categories.map((category) => (
+                <button
+                    key={category}
+                    onClick={() => handleCategorySelect(category)}
+                    className={`mr-2 px-3 md:px-4 py-1 md:py-2 rounded mb-2 md:mb-8 text-sm md:text-base ${
+                        selectedCategory === category
+                            ? "bg-blue-700 text-white"
+                            : "bg-gray-200"
+                    }`}>
+                    {category}
+                </button>
+            ))}
+        </div>
             {/* Input search */}
             <Header onSearch={handleSearch} />
             {Object.keys(filteredProduct).length > 0 ? (
