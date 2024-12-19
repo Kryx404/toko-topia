@@ -4,37 +4,48 @@ import { login } from "../store/userSlice";
 import { useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
 
+// Fungsi Login
 const Login = () => {
+    // State untuk menyimpan email dan password
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [users, setUsers] = useState([]);
+
+    // Menggunakan hook useNavigate untuk mengarahkan pengguna ke halaman lain
     const navigate = useNavigate();
+
+    // Menggunakan hook useDispatch untuk mengirimkan action ke reducer
     const dispatch = useDispatch();
 
-    // default email & password
+    // Email dan password default
     const defaultEmail = "John@gmail.com";
     const defaultPassword = "m38rmF$";
 
+    // Fungsi untuk mengambil data user dari API
     useEffect(() => {
         const fetchUsers = async () => {
             try {
+                // Mengambil data user dari API
                 const response = await fetch(
                     `${process.env.REACT_APP_API_USERS}/users/1`,
                 );
                 const data = await response.json();
                 setUsers(data);
             } catch (error) {
+                // Menampilkan error jika terjadi kesalahan
                 console.error("Error fetching users:", error);
             }
         };
         fetchUsers();
     }, []);
 
+    // Fungsi untuk menghandle submit form
     const handleSubmit = (e) => {
         e.preventDefault();
 
-        // login login default email
+        // Mengecek apakah email dan password sesuai dengan default
         if (email === defaultEmail && password === defaultPassword) {
+            // Membuat token untuk autentikasi
             const token = "some_unique_token";
             localStorage.setItem("token", token);
 
@@ -42,17 +53,21 @@ const Login = () => {
             console.log("Email:", email);
             console.log("Password:", password);
 
-            // Setelah login berhasil, arahkan pengguna ke halaman beranda atau halaman lain
+            // Mengirimkan action ke reducer untuk mengupdate state user
             dispatch(login({ email }));
+
+            // Menampilkan alert jika login berhasil
             Swal.fire({
                 title: "Login Successful!",
                 text: "Welcome back!",
                 icon: "success",
                 confirmButtonText: "OK",
             }).then(() => {
-                navigate("/"); // Arahkan pengguna ke halaman beranda
+                // Mengarahkan pengguna ke halaman beranda
+                navigate("/");
             });
         } else {
+            // Menampilkan alert jika login gagal
             Swal.fire({
                 title: "Login Failed!",
                 text: "Incorrect email or password.",
@@ -62,6 +77,7 @@ const Login = () => {
         }
     };
 
+    // Render form login
     return (
         <section className="bg-gray-50 mt-16">
             <div className="flex flex-col items-center justify-center px-6 py-8 mx-auto md:h-screen lg:py-0">

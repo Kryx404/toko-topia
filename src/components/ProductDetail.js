@@ -6,20 +6,25 @@ import Swal from "sweetalert2";
 import "../App.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCartPlus } from "@fortawesome/free-solid-svg-icons";
-import Product from "./Product"; // Import komponen Product
+import Product from "./Product";
 
+// Fungsi komponen ProductDetail
 const ProductDetail = () => {
-    const { id } = useParams(); // Mengambil id produk dari URL
+    // Mengambil id produk dari URL
+    const { id } = useParams();
     const dispatch = useDispatch();
     const navigate = useNavigate();
     const isLoggedIn = useSelector((state) => state.user.isLoggedIn);
     const apiUrl = process.env.REACT_APP_API_URL; // Pastikan ini diatur dengan benar
+
+    // State untuk produk, quantity, stok, loading, dan produk terkait
     const [product, setProduct] = useState(null);
     const [quantity, setQuantity] = useState(1); // Inisialisasi quantity dengan 1
     const [availableStock, setAvailableStock] = useState(0);
     const [loading, setLoading] = useState(true);
     const [relatedProducts, setRelatedProducts] = useState([]); // State untuk produk terkait
 
+    // Fungsi untuk mengambil detail produk dan produk terkait
     useEffect(() => {
         const fetchProductDetail = async () => {
             setLoading(true);
@@ -68,15 +73,16 @@ const ProductDetail = () => {
         fetchProductDetail();
     }, [id, apiUrl]);
 
+    // Fungsi untuk menambahkan produk ke keranjang
     const handleAddToCart = () => {
         if (!isLoggedIn) {
             Swal.fire({
-                title: "Peringatan!",
-                text: "Anda harus login terlebih dahulu untuk melakukan pembelian",
+                title: "Warning!",
+                text: "You must log in first to make a purchase",
                 icon: "warning",
                 showCancelButton: true,
                 confirmButtonText: "Login",
-                cancelButtonText: "Batal",
+                cancelButtonText: "Cancel",
             }).then((result) => {
                 if (result.isConfirmed) {
                     navigate("/login");
@@ -87,11 +93,11 @@ const ProductDetail = () => {
 
         if (product && quantity > availableStock) {
             Swal.fire({
-                title: "Stok Tidak Cukup!",
+                title: "Insufficient Stock!",
                 text:
-                    "Stok produk hanya tersedia " +
+                    "Product stock is only available " +
                     product.availableStock +
-                    " buah.",
+                    " pieces.",
                 icon: "error",
                 confirmButtonText: "OK",
             });
@@ -120,13 +126,14 @@ const ProductDetail = () => {
         }
 
         Swal.fire({
-            title: "Berhasil!",
-            text: "Produk berhasil ditambahkan ke keranjang",
+            title: "Success!",
+            text: "Product successfully added to the cart",
             icon: "success",
             confirmButtonText: "OK",
         });
     };
 
+    // Fungsi untuk mengubah quantity
     const handleQuantityChange = (e) => {
         const value = Number(e.target.value);
         if (value >= 1 && value <= availableStock) {

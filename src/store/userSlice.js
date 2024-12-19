@@ -4,7 +4,7 @@ const userSlice = createSlice({
   name: 'user',
   initialState: {
     isLoggedIn: false, // Status login awal
-    userInfo: null, // Informasi pengguna (jika diperlukan)
+    userInfo: null,
   },
   reducers: {
     login: (state, action) => {

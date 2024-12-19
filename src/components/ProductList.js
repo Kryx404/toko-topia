@@ -1,23 +1,23 @@
 import React, { useState, useEffect } from "react";
 import Product from "./Product";
-import Cart from "./Cart";
+import Cart from "./Cart"; 
 import Header from "./Header";
-import Banner from "./Banner";
-import "../App.css";
+import Banner from "./Banner"; 
+import "../App.css"; 
 
 const ProductList = () => {
-    // data banner
+    // Data banner
     const banners = [
         { id: 1, url: "/image/banner1.jpg" },
         { id: 2, url: "/image/banner2.jpg" },
         { id: 3, url: "/image/banner3.jpg" },
     ];
 
-    const [product, setProducts] = useState([]);
-    const [searchTerm, setSearchTerm] = useState("");
+    const [product, setProducts] = useState([]); // State untuk menyimpan daftar produk
+    const [searchTerm, setSearchTerm] = useState(""); // State untuk menyimpan kata kunci pencarian
     const [selectedCategory, setSelectedCategory] = useState("All"); // State untuk kategori yang dipilih
-    const apiUrl = process.env.REACT_APP_API_URL;
-    const [loading, setLoading] = useState(true);
+    const apiUrl = process.env.REACT_APP_API_URL; // URL API untuk mengambil data produk
+    const [loading, setLoading] = useState(true); // State untuk menandakan apakah data sedang dimuat
 
     // Daftar kategori yang tersedia
     const categories = [
@@ -32,21 +32,21 @@ const ProductList = () => {
         const fetchProducts = async () => {
             setLoading(true); // Set loading ke true saat mulai fetch
             try {
-                const response = await fetch(`${apiUrl}/products`);
+                const response = await fetch(`${apiUrl}/products`); // Mengambil data produk dari API
                 if (!response.ok) {
                     throw new Error(`HTTP error! status: ${response.status}`);
                 }
-                const data = await response.json();
-                setProducts(data);
+                const data = await response.json(); // Mengonversi response ke JSON
+                setProducts(data); // Menyimpan data produk ke state
             } catch (error) {
-                console.error("Error fetching products:", error);
+                console.error("Error fetching products:", error); // Menangani error jika fetch gagal
             } finally {
                 setLoading(false); // Set loading ke false setelah fetch selesai
             }
         };
 
-        fetchProducts();
-    }, [apiUrl]);
+        fetchProducts(); // Memanggil fungsi fetchProducts
+    }, [apiUrl]); // Dependency array untuk menjalankan efek saat apiUrl berubah
 
     // Filter produk berdasarkan kategori yang dipilih dan pencarian
     const filteredProducts = product.filter((prod) => {
@@ -56,29 +56,27 @@ const ProductList = () => {
         const matchesSearch = prod.title
             .toLowerCase()
             .includes(searchTerm.toLowerCase());
-        return matchesCategory && matchesSearch;
+        return matchesCategory && matchesSearch; // Mengembalikan produk yang sesuai dengan kategori dan pencarian
     });
 
-
-    // produk bedasarkan kategori
+    // Kelompokkan produk berdasarkan kategori
     const groupedProducts = filteredProducts.reduce((acc, product) => {
-        const category = product.category || "Lainnya";
+        const category = product.category || "Lainnya"; // Jika kategori tidak ada, gunakan "Lainnya"
         if (!acc[category]) {
-            acc[category] = [];
+            acc[category] = []; // Inisialisasi array untuk kategori baru
         }
-        acc[category].push(product);
+        acc[category].push(product); // Tambahkan produk ke kategori yang sesuai
         return acc;
     }, {});
 
-    // search product
+    // Filter produk berdasarkan judul
     const filteredProduct = Object.keys(groupedProducts).reduce(
         (acc, category) => {
             const filteredItems = groupedProducts[category].filter((product) =>
-                // filter bedasarkan judul
-                product.title.toLowerCase().includes(searchTerm.toLowerCase()),
+                product.title.toLowerCase().includes(searchTerm.toLowerCase()), // Filter berdasarkan judul
             );
             if (filteredItems.length > 0) {
-                acc[category] = filteredItems;
+                acc[category] = filteredItems; // Tambahkan kategori jika ada produk yang sesuai
             }
             return acc;
         },
@@ -87,12 +85,12 @@ const ProductList = () => {
 
     // Fungsi untuk menangani pencarian
     const handleSearch = (term) => {
-        setSearchTerm(term);
+        setSearchTerm(term); // Update state searchTerm dengan nilai baru
     };
 
     // Fungsi untuk menangani pemilihan kategori
     const handleCategorySelect = (category) => {
-        setSelectedCategory(category);
+        setSelectedCategory(category); // Update state selectedCategory dengan kategori yang dipilih
     };
 
     // Menampilkan loading saat data belum tersedia
@@ -109,7 +107,7 @@ const ProductList = () => {
         <div className="container mx-auto p-4 mt-16">
             {/* Banner Section */}
             <Banner banners={banners} /> {/* Menggunakan komponen Banner */}
-            <h1 className="text-xl font-semibold uppercase mb-4">Categories</h1>
+            <h1 className="text-xl font-semibold uppercase mb - 4">Categories</h1>
             {/* Kategori Buttons */}
             <div className="mb-4 flex justify-center">
                 {categories.map((category) => (
@@ -125,7 +123,7 @@ const ProductList = () => {
                     </button>
                 ))}
             </div>
-            {/* input search */}
+            {/* Input search */}
             <Header onSearch={handleSearch} />
             {Object.keys(filteredProduct).length > 0 ? (
                 Object.keys(filteredProduct).map((category) => (
@@ -141,11 +139,11 @@ const ProductList = () => {
                     </div>
                 ))
             ) : (
-                <p>Product not found</p>
+                <p className="text-center font-semibold">Product not found</p>
             )}
             {/* <Cart /> */}
         </div>
     );
 };
 
-export default ProductList;
+export default ProductList; // Ekspor komponen ProductList untuk digunakan di bagian lain aplikasi

@@ -2,7 +2,6 @@
  edit header tambah category
 
  ganti bahasa ke inggris
- tambah category di product list
 
 
 

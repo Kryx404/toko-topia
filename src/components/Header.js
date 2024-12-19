@@ -11,12 +11,20 @@ import {
     faHouse,
 } from "@fortawesome/free-solid-svg-icons";
 
+// Komponen Header yang menampilkan navigasi dan fitur pencarian
 const Header = ({ onSearch }) => {
+    // Menggunakan hook useDispatch untuk memanggil action logout
     const dispatch = useDispatch();
+
+    // Menggunakan hook useSelector untuk memeriksa status login pengguna
     const isLoggedIn = useSelector((state) => state.user.isLoggedIn);
+
+    // Menggunakan hook useState untuk mengelola state pencarian
     const [searchTerm, setSearchTerm] = useState("");
 
+    // Fungsi untuk menangani logout pengguna
     const handleLogout = () => {
+        // Menampilkan konfirmasi logout menggunakan SweetAlert2
         Swal.fire({
             title: "Logout Confirmation",
             text: "Are you sure you want to logout?",
@@ -26,7 +34,9 @@ const Header = ({ onSearch }) => {
             cancelButtonText: "Cancel",
         }).then((result) => {
             if (result.isConfirmed) {
-                dispatch(logout()); // Panggil action logout
+                // Memanggil action logout jika pengguna mengkonfirmasi
+                dispatch(logout());
+                // Menampilkan notifikasi logout berhasil
                 Swal.fire(
                     "Logout Successful!",
                     "You have successfully logged out.",
@@ -36,9 +46,11 @@ const Header = ({ onSearch }) => {
         });
     };
 
-    // search
+    // Fungsi untuk menangani perubahan input pencarian
     const handleSearchChange = (e) => {
+        // Mengupdate state pencarian
         setSearchTerm(e.target.value);
+        // Memanggil fungsi onSearch yang diteruskan sebagai props
         onSearch(e.target.value);
     };
 
@@ -59,14 +71,14 @@ const Header = ({ onSearch }) => {
                 </div>
 
                 <div className="flex justify-center mx-4">
-    <input
-        type="text"
-        placeholder="Search..."
-        value={searchTerm}
-        onChange={handleSearchChange}
-        className="border rounded p-2 w-full md:w-96"
-    />
-</div>
+                    <input
+                        type="text"
+                        placeholder="Search..."
+                        value={searchTerm}
+                        onChange={handleSearchChange}
+                        className="border rounded p-2 w-full md:w-96"
+                    />
+                </div>
 
                 <nav className="flex flex-col md:flex-row items-center">
                     <ul className="flex flex-col md:flex-row justify-end gap-4 items-center">
