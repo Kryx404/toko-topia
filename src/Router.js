@@ -9,9 +9,9 @@ import Footer from './components/Footer';
 
 const AppRouter = () => {
     return (
-      <div>
+      <div className= "flex flex-col min-h-screen">
         <Header />
-        <div className="container mx-auto p-4">
+        <div className="container mx-auto p-4 flex-grow">
           <Routes>
             <Route path="/" element={<ProductList />} />
             <Route path="/products/:id" element={<ProductDetail />} />
