@@ -6,6 +6,7 @@ import Swal from "sweetalert2";
 import "../App.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCartPlus } from "@fortawesome/free-solid-svg-icons";
+import Product from "./Product"; // Import komponen Product
 
 const ProductDetail = () => {
     const { id } = useParams(); // Mengambil id produk dari URL
@@ -17,6 +18,7 @@ const ProductDetail = () => {
     const [quantity, setQuantity] = useState(1); // Inisialisasi quantity dengan 1
     const [availableStock, setAvailableStock] = useState(0);
     const [loading, setLoading] = useState(true);
+    const [relatedProducts, setRelatedProducts] = useState([]); // State untuk produk terkait
 
     useEffect(() => {
         const fetchProductDetail = async () => {
@@ -38,10 +40,28 @@ const ProductDetail = () => {
                 const data = await response.json();
                 setProduct(data);
                 setQuantity(Math.min(20, data.availableStock || 1));
+
+                // Ambil produk terkait berdasarkan kategori yang sama
+                const relatedResponse = await fetch(
+                    `${apiUrl}/products/category/${data.category}`,
+                );
+                if (!relatedResponse.ok) {
+                    throw new Error(
+                        `HTTP error! status: ${relatedResponse.status}`,
+                    );
+                }
+                const relatedData = await relatedResponse.json();
+
+                // Filter produk yang sama dengan produk yang sedang dilihat
+                const filteredRelatedProducts = relatedData.filter(
+                    (item) => item.id !== data.id,
+                );
+                setRelatedProducts(filteredRelatedProducts);
             } catch (error) {
                 console.error("Error fetching product detail:", error);
             } finally {
                 setLoading(false);
+                window.scrollTo(0, 0); // Scroll ke atas setelah data diambil
             }
         };
 
@@ -129,7 +149,7 @@ const ProductDetail = () => {
     }
 
     return (
-        <div className="container mx-auto p-4 mt-32 h-screen">
+        <div className="container mx-auto p-4 mt-32 h-full">
             <div className="flex flex-col md:flex-row">
                 <img
                     src={product.image}
@@ -142,10 +162,10 @@ const ProductDetail = () => {
                         {product.description}
                     </p>
                     <p className="text-lg font-semibold mb-4">
-                        Sisa Stok: {availableStock} buah
+                        Remaining Stock: {availableStock} Pieces
                     </p>
                     <div className="flex items-center mb-4">
-                        <label className="mr-2"> Jumlah:</label>
+                        <label className="mr-2"> Quantity:</label>
                         <input
                             type="number"
                             value={quantity}
@@ -159,8 +179,24 @@ const ProductDetail = () => {
                         onClick={handleAddToCart}
                         className="mt-4 bg-blue-700 text-white py-2 px-4 rounded hover:bg-blue-500 transition duration-200">
                         <FontAwesomeIcon icon={faCartPlus} className="mr-2" />
-                        Tambah ke Keranjang
+                        Add to Cart
                     </button>
+                </div>
+            </div>
+            {/* Tampilkan produk terkait */}
+            <div className="mt-8">
+                <h2 className="text-2xl font-bold mb-4">Related Products</h2>
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                    {relatedProducts.length > 0 ? (
+                        relatedProducts.map((relatedProduct) => (
+                            <Product
+                                key={relatedProduct.id}
+                                product={relatedProduct}
+                            />
+                        ))
+                    ) : (
+                        <p>Product Not Found.</p>
+                    )}
                 </div>
             </div>
         </div>
