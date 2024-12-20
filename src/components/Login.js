@@ -86,7 +86,7 @@ const Login = () => {
                     className="flex items-center mb-6 text-2xl font-semibold text-gray-900">
                     <img
                         className="w-8 h-8 mr-2"
-                        src="https://flowbite.s3.amazonaws.com/blocks/marketing-ui/logo.svg"
+                        src="/logo-tokotopia.png"
                         alt="logo"
                     />
                     TokoTopia
@@ -111,7 +111,7 @@ const Login = () => {
                                     value={email}
                                     onChange={(e) => setEmail(e.target.value)}
                                     className="bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5"
-                                    placeholder="name@company.com"
+                                    placeholder="name@gmail.com"
                                     required
                                 />
                             </div>
