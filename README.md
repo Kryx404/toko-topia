@@ -4,9 +4,16 @@ Toko Topia adalah sebuah aplikasi e-commerce berbasis React yang memungkinkan pe
 
 ## Fitur
 
-* Fitur 1
-* Fitur 2
-* Fitur 3
+* Keranjang Belanja
+* Pencarian Produk
+* Alert Notifikasi
+* Fitur Login
+* Responsive
+
+## Teknologi
+  
+* React untuk antarmuka pengguna.
+* Vercel untuk hosting.
 
 ## Lisensi
 
