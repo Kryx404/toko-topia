@@ -102,7 +102,7 @@ const Header = ({ onSearch }) => {
                     </Link>
                 </div>
 
-                <div className="hidden flex justify-center mx-4">
+                <div className="hidden md:flex justify-center mx-4">
                     <input
                         type="text"
                         placeholder="Search..."
